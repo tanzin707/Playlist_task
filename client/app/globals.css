@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-gray-700;
+  }
+  
+  body {
+    @apply antialiased bg-gray-950 text-white;
+  }
+
+  /* Custom Scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-gray-800 rounded-lg;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-gray-600 rounded-lg hover:bg-gray-500 transition-colors;
+  }
+
+  /* Drag and Drop - Simple and clean */
+  [data-rbd-drag-handle-draggable-id] {
+    cursor: grab;
+  }
+
+  [data-rbd-drag-handle-draggable-id]:active {
+    cursor: grabbing;
+  }
+
+  /* Prevent text selection during drag */
+  [data-rbd-draggable-id] {
+    user-select: none;
+  }
+}
+
+@layer components {
+  .drag-handle {
+    @apply cursor-grab active:cursor-grabbing;
+  }
+  
+  .drag-preview {
+    @apply opacity-50 scale-95;
+  }
+  
+  .drop-zone {
+    @apply border-2 border-dashed border-purple-500 bg-purple-500/10;
+  }
+
+  /* Smooth animations */
+  .transition-smooth {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@layer utilities {
+  /* Tooltip animations */
+  @keyframes fade-in-scale {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes slide-in-fade {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-scale {
+    animation: fade-in-scale 0.2s ease-out;
+  }
+
+  .animate-slide-in-fade {
+    animation: slide-in-fade 0.3s ease-out;
+  }
+}

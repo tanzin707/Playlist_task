@@ -1,0 +1,21 @@
+{
+  "name": "collaborative-playlist",
+  "version": "1.0.0",
+  "description": "Realtime Collaborative Playlist Manager",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd server && npm run dev",
+    "dev:frontend": "cd client && npm run dev",
+    "install:all": "cd server && npm install && cd ../client && npm install",
+    "build": "cd client && npm run build",
+    "test": "cd server && npm test",
+    "setup": "npm run install:all && cd server && npm run db:migrate && npm run db:seed"
+  },
+  "keywords": ["playlist", "collaborative", "realtime"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
+
