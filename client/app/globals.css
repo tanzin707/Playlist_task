@@ -4,24 +4,24 @@
 
 @layer base {
   * {
-    @apply border-gray-700;
+    @apply border-[#272727];
   }
   
   body {
-    @apply antialiased bg-gray-950 text-white;
+    @apply antialiased bg-[#0f0f0f] text-white;
   }
 
-  /* Custom Scrollbar */
+  /* Custom Scrollbar - YouTube Music Style */
   .custom-scrollbar::-webkit-scrollbar {
     width: 8px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-track {
-    @apply bg-gray-800 rounded-lg;
+    @apply bg-[#030303] rounded-lg;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-gray-600 rounded-lg hover:bg-gray-500 transition-colors;
+    @apply bg-[#272727] rounded-lg hover:bg-[#3d3d3d] transition-colors;
   }
 
   /* Drag and Drop - Simple and clean */
@@ -49,7 +49,7 @@
   }
   
   .drop-zone {
-    @apply border-2 border-dashed border-purple-500 bg-purple-500/10;
+    @apply border-2 border-dashed border-white/20 bg-[#272727]/50;
   }
 
   /* Smooth animations */

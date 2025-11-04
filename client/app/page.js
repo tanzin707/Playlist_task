@@ -669,72 +669,167 @@ export default function Home() {
   }, [nowPlaying, playlist, handlePlay]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
-      </div>
+    <div className="min-h-screen flex bg-[#0f0f0f] text-white">
+      {/* Fixed Left Sidebar - YouTube Music Style */}
+      <aside className="hidden lg:flex flex-col w-64 bg-[#030303] border-r border-[#272727] fixed left-0 top-0 bottom-0 overflow-y-auto custom-scrollbar">
+        {/* Logo */}
+        <div className="px-6 py-4 flex items-center gap-3">
+          <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0">
+            <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </div>
+          <span className="text-xl font-semibold">Music</span>
+        </div>
 
-      <header className="bg-gray-900/90 backdrop-blur-md border-b border-gray-800/50 shadow-xl animate-slide-in-down sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-          <div className="flex items-center justify-between flex-wrap gap-3">
-            <div className="flex items-center gap-3 sm:gap-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 flex items-center justify-center shadow-lg animate-scale-in hover:scale-110 transition-transform duration-300 hover:rotate-6">
-                <svg className="w-5 h-5 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-                </svg>
+        {/* Navigation */}
+        <nav className="px-2 py-2">
+          <a href="#" className="flex items-center gap-4 px-4 py-2.5 rounded-lg hover:bg-[#272727] transition-colors text-white">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            <span className="font-medium">Home</span>
+          </a>
+        </nav>
+
+        {/* New Playlist Button */}
+        <div className="px-4 py-2">
+          <button
+            onClick={() => {
+              const name = prompt('Playlist name:');
+              if (name) handleCreatePlaylist(name);
+            }}
+            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-[#272727] transition-colors text-white border border-[#272727] hover:border-[#3d3d3d]"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            <span className="font-medium">New playlist</span>
+          </button>
+        </div>
+
+        {/* Playlists Section */}
+        <div className="px-2 py-2 flex-1 overflow-y-auto">
+          <div className="px-4 py-2">
+            <h3 className="text-xs font-semibold text-[#aaaaaa] uppercase tracking-wider mb-2">Your Playlists</h3>
+          </div>
+          <div className="space-y-1">
+            {playlists.map((playlist) => (
+              <div
+                key={playlist.id}
+                className={`group flex items-center justify-between px-4 py-2.5 rounded-lg cursor-pointer transition-colors ${
+                  currentPlaylistId === playlist.id
+                    ? 'bg-[#272727] text-white'
+                    : 'hover:bg-[#272727] text-[#f1f1f1]'
+                }`}
+                onClick={() => handleSelectPlaylist(playlist.id)}
+              >
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-medium truncate">{playlist.name}</div>
+                  {playlist.description && (
+                    <div className="text-xs text-[#aaaaaa] truncate mt-0.5">{playlist.description}</div>
+                  )}
+                </div>
+                {playlists.length > 1 && playlist.name !== 'Main Playlist' && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (confirm('Delete this playlist?')) handleDeletePlaylist(playlist.id);
+                    }}
+                    className="ml-2 p-1 text-[#aaaaaa] hover:text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                )}
               </div>
-              <div>
-                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-slide-in-right">
-                  Collaborative Playlist
-                </h1>
-                <p className="text-xs sm:text-sm text-gray-400 mt-0.5 animate-fade-in">Real-time music collaboration</p>
-              </div>
-            </div>
-            <ConnectionIndicator connected={connected} reconnecting={reconnecting} />
+            ))}
           </div>
         </div>
-      </header>
+      </aside>
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-3 sm:px-4 lg:px-8 py-4 sm:py-6 lg:py-8 space-y-4 sm:space-y-6 lg:space-y-8 pb-24 sm:pb-32 relative z-10">
-        {/* Playlist Selector */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 sm:gap-6">
-          <div className="lg:col-span-2 space-y-3 sm:space-y-4 order-2 lg:order-1">
-            <PlaylistSelector
-              playlists={playlists}
-              currentPlaylistId={currentPlaylistId}
-              onSelectPlaylist={handleSelectPlaylist}
-              onCreatePlaylist={handleCreatePlaylist}
-              onDeletePlaylist={handleDeletePlaylist}
-            />
-            <UserPresence
-              users={activeUsers}
-              currentUserId={currentUser?.id}
-              onSetName={setUserName}
-            />
+      {/* Main Content Area */}
+      <div className="flex-1 lg:ml-64 flex flex-col min-h-screen">
+        {/* Top Header - YouTube Music Style */}
+        <header className="sticky top-0 z-50 bg-[#0f0f0f] border-b border-[#272727] px-4 sm:px-6 py-3">
+          <div className="flex items-center gap-4">
+            {/* Mobile Menu */}
+            <button className="lg:hidden p-2 hover:bg-[#272727] rounded-full transition-colors">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+
+            {/* Search Bar */}
+            <div className="flex-1 max-w-2xl">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <svg className="h-5 w-5 text-[#aaaaaa]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  placeholder="Search songs, albums, artists..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-12 pr-4 py-2.5 bg-[#272727] text-white border border-[#3d3d3d] rounded-full focus:outline-none focus:border-[#3d3d3d] focus:bg-[#3d3d3d] transition-colors placeholder:text-[#717171]"
+                />
+              </div>
+            </div>
+
+            {/* Right Side - Connection & User */}
+            <div className="flex items-center gap-3">
+              <UserPresence
+                users={activeUsers}
+                currentUserId={currentUser?.id}
+                onSetName={setUserName}
+              />
+              <ConnectionIndicator connected={connected} reconnecting={reconnecting} />
+            </div>
           </div>
-          <div className="lg:col-span-3 space-y-4 sm:space-y-6 lg:space-y-8 order-1 lg:order-2">
-            {/* Track Library */}
-            <TrackLibrary
-          tracks={filteredTracks}
-          playlist={playlist}
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          selectedGenre={selectedGenre}
-          onGenreChange={setSelectedGenre}
-          genres={genres}
-          onAddTrack={handleAddTrack}
-          onRemoveTrack={async (trackId) => {
-            const playlistItem = playlist.find(item => item.track_id === trackId);
-            if (playlistItem) {
-              await handleRemoveTrack(playlistItem.id);
-            }
-          }}
-        />
+        </header>
 
-            {/* Main Collaborative Playlist */}
+        {/* Main Content */}
+        <main className="flex-1 overflow-y-auto bg-[#0f0f0f] pb-20">
+          <div className="px-4 sm:px-6 py-6">
+            {/* Genre Filters */}
+            <div className="mb-6 flex gap-2 overflow-x-auto pb-2 custom-scrollbar">
+              {genres.map((genre) => (
+                <button
+                  key={genre}
+                  onClick={() => setSelectedGenre(genre)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
+                    selectedGenre === genre
+                      ? 'bg-white text-black'
+                      : 'bg-[#272727] text-[#f1f1f1] hover:bg-[#3d3d3d]'
+                  }`}
+                >
+                  {genre === 'all' ? 'All' : genre}
+                </button>
+              ))}
+            </div>
+
+            {/* Track Library Section */}
+            <TrackLibrary
+              tracks={filteredTracks}
+              playlist={playlist}
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              selectedGenre={selectedGenre}
+              onGenreChange={setSelectedGenre}
+              genres={genres}
+              onAddTrack={handleAddTrack}
+              onRemoveTrack={async (trackId) => {
+                const playlistItem = playlist.find(item => item.track_id === trackId);
+                if (playlistItem) {
+                  await handleRemoveTrack(playlistItem.id);
+                }
+              }}
+            />
+
+            {/* Playlist Section */}
             {currentPlaylistId ? (
               <>
                 {!sortByVotes ? (
@@ -762,60 +857,15 @@ export default function Home() {
                     activeUsers={activeUsers}
                   />
                 )}
-                
-                {/* Recently Played */}
-                {recentlyPlayed.length > 0 && (
-                  <div className="bg-gradient-to-br from-gray-900/95 via-gray-800/95 to-gray-900/95 backdrop-blur-sm rounded-xl shadow-2xl p-4 sm:p-6 border border-gray-700/50 animate-fade-in relative overflow-hidden">
-                    {/* Subtle pattern overlay */}
-                    <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_1px_1px,_white_1px,_transparent_0)] bg-[length:20px_20px] pointer-events-none"></div>
-                    
-                    <div className="relative z-10">
-                      <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 flex items-center gap-2 sm:gap-3">
-                        <svg className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Recently Played
-                      </h2>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
-                        {recentlyPlayed.map((item) => (
-                          <div
-                            key={item.id}
-                            className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gray-800/60 rounded-lg border border-gray-700/50 hover:bg-gray-800/80 hover:border-purple-500/30 transition-all duration-300 hover:scale-105"
-                          >
-                            {item.track.cover_url ? (
-                              <img
-                                src={item.track.cover_url}
-                                alt={`${item.track.title} cover`}
-                                className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg object-cover flex-shrink-0 shadow-md"
-                              />
-                            ) : (
-                              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold flex-shrink-0 shadow-md">
-                                {item.track.title.charAt(0)}
-                              </div>
-                            )}
-                            <div className="flex-1 min-w-0">
-                              <div className="font-semibold text-white truncate text-xs sm:text-sm">{item.track.title}</div>
-                              <div className="text-xs text-gray-400 truncate">{item.track.artist}</div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
               </>
             ) : (
-              <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-xl shadow-2xl p-12 border border-gray-700 text-center">
-                <svg className="mx-auto h-16 w-16 text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-                </svg>
-                <p className="text-gray-400 text-lg">Select a playlist to get started</p>
-                <p className="text-gray-500 text-sm mt-2">Or create a new one using the panel on the left</p>
+              <div className="text-center py-16">
+                <p className="text-[#aaaaaa] text-lg">Select a playlist to get started</p>
               </div>
             )}
           </div>
-        </div>
-      </main>
+        </main>
+      </div>
 
       {nowPlaying && (
         <NowPlayingBar

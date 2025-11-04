@@ -10,15 +10,15 @@ function ConnectionIndicator({ connected, reconnecting }) {
   const status = getStatus();
 
   return (
-    <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-gray-800/50 border border-gray-700 transition-all duration-300 hover:scale-105 hover:shadow-lg">
+    <div className="flex items-center gap-2 px-2 py-1 rounded-full text-xs text-[#aaaaaa]">
       <div
-        className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all duration-300 ${
+        className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
           status.pulse
-            ? `${status.colorClass} animate-pulse ${status.shadowClass} shadow-lg scale-110`
+            ? `${status.colorClass} animate-pulse`
             : status.colorClass
         }`}
       />
-      <span className="text-xs sm:text-sm text-gray-300 font-medium transition-colors duration-300 hidden sm:inline">
+      <span className="hidden sm:inline">
         {status.text}
       </span>
     </div>
