@@ -4,9 +4,112 @@ A realtime collaborative playlist application where multiple users can add, remo
 
 ---
 
-## 📖 Complete Beginner's Guide
+## Technology Stack
 
-**This section is for absolute beginners who have never run a Node.js project before.**
+- **Frontend:** Next.js 14 (React)
+- **Backend:** Node.js + Express
+- **Database:** SQLite with Prisma ORM
+- **Realtime:** WebSocket (via `ws` library)
+
+## Quick Start
+
+Choose one of the following options to run the application:
+
+### Option 1: Docker (Recommended - Easiest)
+
+**Prerequisites:**
+- Docker Desktop installed ([Download here](https://www.docker.com/products/docker-desktop/))
+
+**Quick Start:**
+
+1. **Open terminal in the project folder:**
+   ```bash
+   cd collaborative-playlist
+   ```
+
+2. **Test Docker status (optional but recommended):**
+   ```powershell
+   .\test-docker.ps1
+   ```
+   This will verify Docker is running and show configuration status.
+
+3. **Start all services with Docker Compose:**
+   ```bash
+   docker compose up --build
+   ```
+   
+   Or use the helper script:
+   ```powershell
+   .\start-docker.ps1
+   ```
+
+4. **Wait for containers to start:**
+   - The database will be automatically set up and seeded
+   - Backend server starts on port 4000
+   - Frontend server starts on port 3000
+   - You'll see logs from all services
+
+5. **Open your browser:**
+   ```
+   http://localhost:3000
+   ```
+
+6. **To stop the application:**
+   - Press `Ctrl + C` in the terminal
+   - Or run: `docker compose down`
+
+**That's it!** Docker handles all the setup automatically - no need to install Node.js, dependencies, or set up the database manually.
+
+**Note:** First time build may take a few minutes as it downloads images and installs dependencies.
+
+#### Docker Storage Configuration
+
+The project is configured to store the database volume on **D: drive** at:
+- `D:\docker-data\collaborative-playlist\db`
+
+This ensures database data is stored on your D: drive to save space on your C: drive.
+
+**To configure Docker Desktop to store ALL Docker data on D: drive:**
+1. Run the configuration helper script:
+   ```powershell
+   .\configure-docker-d-drive.ps1
+   ```
+2. Follow the instructions in the script output
+3. Docker Desktop will restart and move all data to D: drive
+
+#### Helper Scripts
+
+The project includes helpful PowerShell scripts for Docker management:
+
+- **`test-docker.ps1`** - Check Docker status and configuration
+- **`start-docker.ps1`** - Start the project with Docker (checks status first)
+- **`cleanup-docker.ps1`** - Remove all containers, volumes, and images for this project
+- **`configure-docker-d-drive.ps1`** - Guide to configure Docker Desktop to use D: drive
+
+**Example usage:**
+```powershell
+# Test if Docker is ready
+.\test-docker.ps1
+
+# Start the project
+.\start-docker.ps1
+
+# Clean up everything
+.\cleanup-docker.ps1
+```
+
+### Running Instructions
+
+The application will be available at:
+- **Frontend:** http://localhost:3000
+- **Backend API:** http://localhost:4000
+- **WebSocket:** ws://localhost:4000
+
+---
+
+### Option 2: Manual Setup
+
+**This section is for those who prefer to run the application manually without Docker.**
 
 ### Step 1: Install Node.js (If You Don't Have It)
 
@@ -193,6 +296,14 @@ You need to run TWO servers at the same time (backend and frontend).
 
 **Problem: "Database errors"**
 - Solution: Delete `server/prisma/dev.db` and run Steps 5.2-5.4 again
+- Docker users: Stop containers, delete `D:\docker-data\collaborative-playlist\db`, then restart
+
+**Problem: "Docker Desktop not running"**
+- Solution: Start Docker Desktop and wait for it to fully initialize (whale icon should be stable)
+- Run `.\test-docker.ps1` to verify Docker is ready
+
+**Problem: "Port 3000/4000 already in use"**
+- Solution: Stop other applications using these ports, or modify ports in `docker-compose.yml`
 
 **Problem: Servers won't start**
 - Solution: Make sure you're in the correct folder and ran `npm run install:all` successfully
@@ -215,66 +326,18 @@ After the first setup, you only need to:
 
 That's it! The database is already set up.
 
----
-
-## Technology Stack
-
-- **Frontend:** Next.js 14 (React)
-- **Backend:** Node.js + Express
-- **Database:** SQLite with Prisma ORM
-- **Realtime:** WebSocket (via `ws` library)
-
-## Quick Start
-
-### Prerequisites
-
-- Node.js 18+ 
-- npm or yarn
-
-### Installation & Setup
-
-1. Install all dependencies:
-```bash
-npm run install:all
-```
-
-2. Set up environment variables:
-```bash
-cp .env.example .env
-```
-
-3. Set up database:
-```bash
-cd server
-npm run db:migrate
-npm run db:seed
-```
-
-4. Start development servers:
-```bash
-npm run dev
-```
-
-Or use Docker:
-```bash
-docker compose up
-```
-
-### Running Instructions
-
-The application will be available at:
-- **Frontend:** http://localhost:3000
-- **Backend API:** http://localhost:4000
-- **WebSocket:** ws://localhost:4000
-
 ## Project Structure
 
 ```
 collaborative-playlist/
-├── client/          # Next.js frontend
-├── server/          # Express backend
-├── docker-compose.yml
-└── README.md
+├── client/                      # Next.js frontend
+├── server/                      # Express backend
+├── docker-compose.yml           # Docker Compose configuration
+├── cleanup-docker.ps1           # Docker cleanup script
+├── configure-docker-d-drive.ps1 # Docker D: drive configuration guide
+├── start-docker.ps1            # Docker startup script
+├── test-docker.ps1             # Docker status check script
+└── README.md                    # This file
 ```
 
 ## Database Setup
@@ -306,6 +369,10 @@ This will create:
 
 - View/edit data: `npm run db:studio` (opens Prisma Studio)
 - Reset database: Delete `prisma/dev.db` and run migrations + seed again
+
+**Docker Users:**
+- Database volume is stored at: `D:\docker-data\collaborative-playlist\db`
+- To reset database: Stop containers, delete the volume directory, then restart
 
 ## Testing
 

@@ -158,18 +158,18 @@ async function main() {
   });
 
   const jazzPlaylist = await prisma.playlist.create({
-    data: {
+      data: {
       name: 'Jazz Collection',
       description: 'Smooth jazz and classics',
-    },
-  });
+      },
+    });
 
   const hipHopPlaylist = await prisma.playlist.create({
-    data: {
+        data: {
       name: 'Hip-Hop Essentials',
       description: 'Essential hip-hop tracks',
-    },
-  });
+        },
+      });
 
   console.log('Created 5 playlists');
 
