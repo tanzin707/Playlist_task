@@ -831,33 +831,18 @@ export default function Home() {
 
             {/* Playlist Section */}
             {currentPlaylistId ? (
-              <>
-                {!sortByVotes ? (
-                  <DragDropContext onDragEnd={handleDragEnd}>
-                    <PlaylistPanel
-                      playlist={playlist}
-                      onRemove={handleRemoveTrack}
-                      onVote={handleVote}
-                      onPlay={handlePlay}
-                      onSortByVotes={handleSortByVotes}
-                      sortByVotes={sortByVotes}
-                      onExport={exportPlaylist}
-                      activeUsers={activeUsers}
-                    />
-                  </DragDropContext>
-                ) : (
-                  <PlaylistPanel
-                    playlist={sortedPlaylist}
-                    onRemove={handleRemoveTrack}
-                    onVote={handleVote}
-                    onPlay={handlePlay}
-                    onSortByVotes={handleSortByVotes}
-                    sortByVotes={sortByVotes}
-                    onExport={exportPlaylist}
-                    activeUsers={activeUsers}
-                  />
-                )}
-              </>
+              <DragDropContext onDragEnd={handleDragEnd}>
+                <PlaylistPanel
+                  playlist={sortByVotes ? sortedPlaylist : playlist}
+                  onRemove={handleRemoveTrack}
+                  onVote={handleVote}
+                  onPlay={handlePlay}
+                  onSortByVotes={handleSortByVotes}
+                  sortByVotes={sortByVotes}
+                  onExport={exportPlaylist}
+                  activeUsers={activeUsers}
+                />
+              </DragDropContext>
             ) : (
               <div className="text-center py-16">
                 <p className="text-[#aaaaaa] text-lg">Select a playlist to get started</p>
